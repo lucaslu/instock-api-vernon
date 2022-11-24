@@ -122,11 +122,13 @@ exports.deleteWarehouse = (req, res) => {
   knex("warehouses")
     .delete()
     .where({ id: req.params.id })
-    .then(() => {
+    .then((data) => {
       // For DELETE response we can use 204 status code
       res
         .status(204)
-        .send(`Warehouse with id: ${req.params.id} has been deleted`);
+        .send(`Warehouse with id: ${req.params.id} has been deleted`)
+        .json(data);
+      console.log(data);
     })
     .catch((err) =>
       res.status(400).send(`Error deleting Warehouse ${req.params.id} ${err}`)

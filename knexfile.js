@@ -1,14 +1,12 @@
 // Update with your config settings.
-const path = require("node:path");
-require("dotenv").config();
 
-// for InStock only following line is required
-// require("dotenv").config();
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
+
+require("dotenv").config();
 module.exports = {
-  client: "mysql",
+  client: "mysql2",
   debug: true,
   connection: {
     host: "127.0.0.1",

@@ -68,27 +68,26 @@ exports.addInventoryItem = (req, res) => {
         });
     })
     .catch((err) => res.status(400).send(`Error creating Inventory: ${err}`));
-    
+};
+
 exports.deleteItem = (req, res) => {
   knex("inventories")
     .where({ id: req.params.id })
     .delete()
     .then(() => {
       knex("inventories")
-      .join("warehouses", "warehouses.id", "=", "inventories.warehouse_id")
-      .select(
-        "warehouses.warehouse_name",
-        "inventories.id",
-        "inventories.item_name",
-        "inventories.category",
-        "inventories.status",
-        "inventories.quantity"
-      )
-      .then((data)=>{
-        res
-          .status(200)
-          .json(data);
-      })
+        .join("warehouses", "warehouses.id", "=", "inventories.warehouse_id")
+        .select(
+          "warehouses.warehouse_name",
+          "inventories.id",
+          "inventories.item_name",
+          "inventories.category",
+          "inventories.status",
+          "inventories.quantity"
+        )
+        .then((data) => {
+          res.status(200).json(data);
+        });
     })
     .catch((err) =>
       res.status(400).send(`Error deleting item ${req.params.id} ${err}`)

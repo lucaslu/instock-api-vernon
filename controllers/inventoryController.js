@@ -41,11 +41,21 @@ exports.deleteItem = (req, res) => {
     .where({ id: req.params.id })
     .delete()
     .then(() => {
-      // For DELETE response we can use 204 status code
-      res.status(200).json({
-        message: "Item deleted",
-        id: req.params.id,
-      });
+      knex("inventories")
+      .join("warehouses", "warehouses.id", "=", "inventories.warehouse_id")
+      .select(
+        "warehouses.warehouse_name",
+        "inventories.id",
+        "inventories.item_name",
+        "inventories.category",
+        "inventories.status",
+        "inventories.quantity"
+      )
+      .then((data)=>{
+        res
+          .status(200)
+          .json(data);
+      })
     })
     .catch((err) =>
       res.status(400).send(`Error deleting item ${req.params.id} ${err}`)

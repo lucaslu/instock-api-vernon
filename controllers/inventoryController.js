@@ -35,3 +35,16 @@ exports.singleInventoryItem = (req, res) => {
         .send(`Error retrieving Inventorie ${req.params.id} ${err}`)
     );
 };
+
+exports.deleteItem = (req, res) => {
+  knex("inventories")
+    .where({ id: req.params.id })
+    .delete()
+    .then((data) => {
+      // For DELETE response we can use 204 status code
+      res.status(200).send(req.params.id).json(data);
+    })
+    .catch((err) =>
+      res.status(400).send(`Error deleting item ${req.params.id} ${err}`)
+    );
+};

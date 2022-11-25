@@ -107,7 +107,16 @@ exports.addWarehouse = (req, res) => {
 
 exports.updateWarehouse = (req, res) => {
   knex("warehouses")
-    .update(req.body)
+    .update({
+      warehouse_name: req.body.warehouse_name || "",
+      address: req.body.address || "",
+      city: req.body.city || "",
+      country: req.body.country || "",
+      contact_name: req.body.contact_name || "",
+      contact_position: req.body.contact_position || "",
+      contact_phone: req.body.contact_phone || "",
+      contact_email: req.body.contact_email || "",
+    })
     .where({ id: req.params.id })
     .then((_data) => {
       knex("warehouses")
@@ -124,6 +133,21 @@ exports.updateWarehouse = (req, res) => {
 /**
  * INSERT PATCH end point and route!
  */
+exports.patchWarehouse = (req, res) => {
+  knex("warehouses")
+    .update(req.body)
+    .where({ id: req.params.id })
+    .then((_data) => {
+      knex("warehouses")
+        .where({ id: req.params.id })
+        .then((data) => {
+          res.status(200).json(data[0]);
+        });
+    })
+    .catch((err) =>
+      res.status(400).send(`Error updating Warehouse ${req.params.id} ${err}`)
+    );
+};
 
 /** Delete Warehouse by ID */
 

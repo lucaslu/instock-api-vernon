@@ -8,6 +8,7 @@ router
   .route("/:id")
   .get(warehouseController.singleWarehouse)
   .put(warehouseController.updateWarehouse)
+  .patch(warehouseController.patchWarehouse)
   .delete(warehouseController.deleteWarehouse);
 /**
  * INSERT PATCH end point and route for /id!

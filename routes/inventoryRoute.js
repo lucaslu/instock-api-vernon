@@ -5,6 +5,10 @@ router
   .route("/")
   .get(inventoryController.index)
   .post(inventoryController.addInventoryItem);
-router.route("/:id").get(inventoryController.singleInventoryItem);
+
+router
+  .route("/:id")
+  .get(inventoryController.singleInventoryItem)
+  .delete(inventoryController.deleteItem);
 
 module.exports = router;

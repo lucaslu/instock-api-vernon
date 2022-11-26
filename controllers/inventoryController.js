@@ -39,40 +39,40 @@ exports.singleInventoryItem = (req, res) => {
     );
 };
 
-// /** Add a new Inventory Item */
+/** Add a new Inventory Item */
 
-// exports.addInventoryItem = (req, res) => {
-//   // Validate the request body for required data
-//   if (
-//     !req.body.warehouse_name ||
-//     // !req.body.warehouse_id ||
-//     !req.body.item_name ||
-//     !req.body.description ||
-//     !req.body.category ||
-//     !req.body.status ||
-//     !req.body.quantity
-//   ) {
-//     return res
-//       .status(400)
-//       .send(
-//         "Please make sure to provide warehouse_name, item_name, description, category, status, and quantity"
-//       );
-//   }
+exports.addInventoryItem = (req, res) => {
+  // Validate the request body for required data
+  if (
+    // !req.body.warehouse_name ||
+    !req.body.warehouse_id ||
+    !req.body.item_name ||
+    !req.body.description ||
+    !req.body.category ||
+    !req.body.status ||
+    !req.body.quantity
+  ) {
+    return res
+      .status(400)
+      .send(
+        "Please make sure to provide warehouse_name, item_name, description, category, status, and quantity"
+      );
+  }
 
-//   const newInventoryId = uuidv4();
-//   knex("inventories")
-//     .insert({ ...req.body, id: newInventoryId })
-//     .then((_data) => {
-//       knex("inventories")
-//         .where({ id: newInventoryId })
-//         .then((data) => {
-//           res.status(201).json(data[0]);
-//         });
-//     })
-//     .catch((err) =>
-//       res.status(400).send(`Error creating Inventory Item: ${err}`)
-//     );
-// };
+  const newInventoryId = uuidv4();
+  knex("inventories")
+    .insert({ ...req.body, id: newInventoryId })
+    .then((_data) => {
+      knex("inventories")
+        .where({ id: newInventoryId })
+        .then((data) => {
+          res.status(201).json(data[0]);
+        });
+    })
+    .catch((err) =>
+      res.status(400).send(`Error creating Inventory Item: ${err}`)
+    );
+};
 
 /** Put request - update a single iventory item based on a single passed in ID */
 exports.updateInventoryItem = (req, res) => {

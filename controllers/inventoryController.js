@@ -25,7 +25,7 @@ exports.singleInventoryItem = (req, res) => {
   knex("inventories")
     .where({ id: req.params.id })
     .then((data) => {
-      if (!data.length) {
+      if (data.length) {
         return res
           .status(404)
           .send(`Inventory with id: ${req.params.id} is not found`);
@@ -39,87 +39,37 @@ exports.singleInventoryItem = (req, res) => {
     );
 };
 
-/** Add a new Inventory Item */
+/** Add a new Inventory Item post */
 
 exports.addInventoryItem = (req, res) => {
   // Validate the request body for required data
+  console.log(req.body);
   if (
-    // !req.body.warehouse_name ||
-    !req.body.warehouse_id ||
-    !req.body.item_name ||
-    !req.body.description ||
-    !req.body.category ||
-    !req.body.status ||
-    !req.body.quantity
+    req.body.warehouse_id === "" ||
+    req.body.item_name === "" ||
+    req.body.description === "" ||
+    req.body.category === "" ||
+    req.body.status === "" ||
+    req.body.quantity === ""
   ) {
     return res
       .status(400)
       .send(
-        "Please make sure to provide warehouse_name, item_name, description, category, status, and quantity"
+        "Please make sure to provide warehouse_id, item_name, description, category, status, and quantity fields in a request"
       );
   }
 
-  const newInventoryId = uuidv4();
+  const newItemId = uuidv4();
   knex("inventories")
-    .insert({ ...req.body, id: newInventoryId })
+    .insert({ ...req.body, id: newItemId })
     .then((_data) => {
       knex("inventories")
-        .where({ id: newInventoryId })
+        .where({ id: newItemId })
         .then((data) => {
           res.status(201).json(data[0]);
         });
     })
-    .catch((err) =>
-      res.status(400).send(`Error creating Inventory Item: ${err}`)
-    );
-};
-
-/** Put request - update a single iventory item based on a single passed in ID */
-exports.updateInventoryItem = (req, res) => {
-  knex("inventories")
-    .update({
-      warehouse_name: req.body.warehouse_name || "",
-      warehouse_id: req.body.warehouse_id || "",
-      item_name: req.body.item_name || "",
-      description: req.body.description || "",
-      category: req.body.category || "",
-      status: req.body.status || "",
-      quantity: req.body.quantity || "",
-    })
-    .where({ id: req.params.id })
-    .then((_data) => {
-      knex("inventories")
-        .where({ id: req.params.id })
-        .then((data) => {
-          res.status(200).json(data[0]);
-        });
-    })
-    .catch((err) =>
-      res
-        .status(400)
-        .send(`Error updating Inventory Item ${req.params.id} ${err}`)
-    );
-};
-
-/**
- * INSERT PATCH end point and route!
- */
-exports.patchInventoryItem = (req, res) => {
-  knex("inventories")
-    .update(req.body)
-    .where({ id: req.params.id })
-    .then((_data) => {
-      knex("inventories")
-        .where({ id: req.params.id })
-        .then((data) => {
-          res.status(200).json(data[0]);
-        });
-    })
-    .catch((err) =>
-      res
-        .status(400)
-        .send(`Error updating Inventory Item ${req.params.id} ${err}`)
-    );
+    .catch((err) => res.status(400).send(`Error creating Inventory: ${err}`));
 };
 
 exports.deleteItem = (req, res) => {

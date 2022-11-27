@@ -1,14 +1,15 @@
-const knex = require("knex")(require("../knexfile"));
 const { v4: uuidv4 } = require("uuid");
 
+const knex = require("knex")(require("../knexfile"));
 exports.index = (_req, res) => {
   knex("inventories")
     .join("warehouses", "warehouses.id", "=", "inventories.warehouse_id")
     .select(
       "warehouses.warehouse_name",
+      "inventories.warehouse_id",
       "inventories.id",
-      "inventories.item_name",
       "inventories.category",
+      "inventories.item_name",
       "inventories.status",
       "inventories.quantity"
     )
@@ -19,11 +20,12 @@ exports.index = (_req, res) => {
       res.status(400).send(`Error retrieving Inventories: ${err}`)
     );
 };
+
 exports.singleInventoryItem = (req, res) => {
   knex("inventories")
     .where({ id: req.params.id })
     .then((data) => {
-      if (data.length) {
+      if (!data.length) {
         return res
           .status(404)
           .send(`Inventory with id: ${req.params.id} is not found`);
@@ -41,7 +43,6 @@ exports.singleInventoryItem = (req, res) => {
 
 exports.addInventoryItem = (req, res) => {
   // Validate the request body for required data
-  console.log(req.body);
   if (
     req.body.warehouse_id === "" ||
     req.body.item_name === "" ||
@@ -68,6 +69,24 @@ exports.addInventoryItem = (req, res) => {
         });
     })
     .catch((err) => res.status(400).send(`Error creating Inventory: ${err}`));
+};
+
+exports.patchInventoryItem = (req, res) => {
+  knex("inventories")
+    .update(req.body)
+    .where({ id: req.params.id })
+    .then((_data) => {
+      knex("inventories")
+        .where({ id: req.params.id })
+        .then((data) => {
+          res.status(200).json(data[0]);
+        });
+    })
+    .catch((err) =>
+      res
+        .status(400)
+        .send(`Error updating inventory item ${req.params.id} ${err}`)
+    );
 };
 
 exports.deleteItem = (req, res) => {

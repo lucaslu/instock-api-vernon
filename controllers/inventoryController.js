@@ -23,9 +23,20 @@ exports.index = (_req, res) => {
 
 exports.singleInventoryItem = (req, res) => {
   knex("inventories")
-    .where({ id: req.params.id })
+  .join("warehouses", "warehouses.id", "=", "inventories.warehouse_id")
+  .select(
+    "warehouses.warehouse_name",
+    "inventories.warehouse_id",
+    "inventories.id",
+    "inventories.category",
+    "inventories.description",
+    "inventories.item_name",
+    "inventories.status",
+    "inventories.quantity"
+    )
+    .where({ 'inventories.id': req.params.id })
     .then((data) => {
-      if (!data.length) {
+      if (data.length===0) {
         return res
           .status(404)
           .send(`Inventory with id: ${req.params.id} is not found`);

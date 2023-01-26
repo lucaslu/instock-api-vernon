@@ -4,7 +4,7 @@ Fully responsive Full-stack React/Express.js app built in a week-long sprint wit
 ## Overview:
 In a group of 4, we were tasked with creating an inventory management system for a fictitious company. We were given a Figma design file and had to build a backend using a relational MySQL database, connected with Knex.js, and a server using Express.js. The front-end was built using React (Axios, SCSS, React Router Dom). The user can view warehouse and inventory data as well as add, edit, and delete warehouses and inventories.
 
-## Screenshots and gif Walkthrough
+## Screenshots
 <img width="1103" alt="warehouses" src="https://user-images.githubusercontent.com/50502972/214374777-916c283c-2efe-471d-ba23-fe8ecec0514d.png">
 <img width="1105" alt="add-new-inventory-item" src="https://user-images.githubusercontent.com/50502972/214955495-af55cdb2-5c92-4b39-8ac7-ada311bb2a9d.png">
 <img width="1098" alt="edit-inventory-item" src="https://user-images.githubusercontent.com/50502972/214955500-50b52ddc-9222-439a-851f-889fdda61b10.png">
